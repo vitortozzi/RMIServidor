@@ -47,7 +47,7 @@ public class ImplementServ extends UnicastRemoteObject implements InterfaceServ 
     public boolean locarCarro(Carro c, InterfaceCli refCliente) throws RemoteException {
         synchronized (this) {
             int i = 0;
-            boolean found = false;
+            boolean found = false;           
             for (i = 0; i < carros.size(); i++) {
                 if (carros.get(i).getId() == c.getId()) {
                     found = true;
@@ -56,6 +56,9 @@ public class ImplementServ extends UnicastRemoteObject implements InterfaceServ 
             }
 
             if (found) {
+                if(!carros.get(i).getDisponivel()){
+                    return false;
+                }
                 carros.get(i).setDisponivel(false);
                 carros.get(i).setClienteAtual(refCliente);
                 carros.get(i).setLocalRetirada(c.getLocalRetirada());
