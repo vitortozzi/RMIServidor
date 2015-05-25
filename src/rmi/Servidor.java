@@ -12,6 +12,7 @@ public class Servidor {
             Registry referenciaServicoNomes = LocateRegistry.createRegistry(9898);
             ImplementServ serventeServidor = new ImplementServ();
             referenciaServicoNomes.bind("ServenteServ", serventeServidor);
+            ViewListener viewListener = new ViewListener(serventeServidor);
         } catch (Exception e) {
             
         }
