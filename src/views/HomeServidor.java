@@ -19,6 +19,7 @@ public class HomeServidor extends javax.swing.JFrame {
      */
     public HomeServidor() {
         initComponents();
+        setTitle("Servidor");
     }
 
     public JButton getjButton1() {

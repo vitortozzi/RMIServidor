@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import views.HomeServidor;
@@ -78,10 +80,15 @@ public class ViewListener implements ActionListener {
                 if (c.getPlaca().equals(placa)) {
                     c.setPrecoDiaria(novoPrecoDiaria);
                     for (InterfaceCli ic: c.getClientesInteressados()) {
-                        /*CHAMAR METODO PARA NOTIFICAR CLIENTE AQUI*/
+                        try {
+                            ic.atualizarLista(c);
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(ViewListener.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
+                    break;
                 }
-                break;
+                
             }
             this.consulta.setVisible(false);
             atualizarTabela(placa, novoPrecoDiaria);
