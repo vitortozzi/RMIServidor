@@ -48,7 +48,7 @@ public class ViewListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if(e.getSource().equals(this.home.getjButton1())){
+        if(e.getSource() == this.home.getjButton1()){
             int rowIndex = home.getjTable1().getSelectedRow();
             
             if(rowIndex != -1){
@@ -59,7 +59,8 @@ public class ViewListener implements ActionListener {
                         temp = c;
                     }
                 }
-                if(temp!=null){
+                if(temp != null){
+                    consulta = new JanelaConsulta();
                     consulta.getlModelo().setText(temp.getModelo());
                     consulta.gettMarca().setText(temp.getMarca());
                     consulta.gettValor().setText(String.valueOf(temp.getPrecoDiaria()));
@@ -73,15 +74,16 @@ public class ViewListener implements ActionListener {
                     }
                 }
             }
-        } else if (e.getSource().equals(this.consulta.getBtnAlterarPreco())) {
+        } else if (e.getSource() == this.consulta.getBtnAlterarPreco()) {
             String placa = this.consulta.gettPlaca().getText();
             double novoPrecoDiaria = Double.parseDouble(this.consulta.gettValor().getText());
             for (Carro c: carros) {
                 if (c.getPlaca().equals(placa)) {
                     c.setPrecoDiaria(novoPrecoDiaria);
+                    System.out.println("Existem "+c.getClientesInteressados().size()+" clientes interessados no carro "+c.getModelo()+" da "+c.getMarca());
                     for (InterfaceCli ic: c.getClientesInteressados()) {
                         try {
-                            ic.atualizarLista(c);
+                            ic.receberNotificacao(c);
                         } catch (RemoteException ex) {
                             Logger.getLogger(ViewListener.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -90,7 +92,7 @@ public class ViewListener implements ActionListener {
                 }
                 
             }
-            this.consulta.setVisible(false);
+            this.consulta.dispose();
             atualizarTabela(placa, novoPrecoDiaria);
         }
         
