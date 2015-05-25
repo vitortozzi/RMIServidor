@@ -20,6 +20,7 @@ public class JanelaConsulta extends javax.swing.JFrame {
      */
     public JanelaConsulta() {
         initComponents();
+        setDefaultCloseOperation(JanelaConsulta.DISPOSE_ON_CLOSE);
     }
 
     /**
