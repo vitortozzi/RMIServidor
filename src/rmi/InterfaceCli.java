@@ -11,5 +11,5 @@ public interface InterfaceCli extends Remote {
     
     public int getIdCliente() throws RemoteException;
     public String getNomeCliente() throws RemoteException;
-    public void receberNotificacao(Carro c) throws RemoteException;
+    public void receberNotificacao(Carro c, boolean desceValor) throws RemoteException;
 }
