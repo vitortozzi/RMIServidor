@@ -8,8 +8,11 @@ import rmi.InterfaceCli;
 public class Carro implements Serializable {
 
     private ArrayList<InterfaceCli> clientesInteressados;
+
     private InterfaceCli clienteAtual;
     private boolean disponivel;
+    private String localRetirada;
+    private String localDevolucao;
     
     private int id;
     private String modelo;
@@ -17,9 +20,11 @@ public class Carro implements Serializable {
     private String placa;
     private double precoDiaria;
     
+    private static final long serialVersionUID = 1L;
+    
     public Carro(int id, String modelo, String marca, String placa, double precoDiaria) {
         clientesInteressados = new ArrayList<>();
-        disponivel = true;
+        this.disponivel = true;
         
         this.id = id;
         this.modelo = modelo;
@@ -142,6 +147,34 @@ public class Carro implements Serializable {
     
     public void addClienteInteressado(InterfaceCli refCliente) {
         this.clientesInteressados.add(refCliente);
+    }
+
+    /**
+     * @return the localRetirada
+     */
+    public String getLocalRetirada() {
+        return localRetirada;
+    }
+
+    /**
+     * @param localRetirada the localRetirada to set
+     */
+    public void setLocalRetirada(String localRetirada) {
+        this.localRetirada = localRetirada;
+    }
+
+    /**
+     * @return the localDevolucao
+     */
+    public String getLocalDevolucao() {
+        return localDevolucao;
+    }
+
+    /**
+     * @param localDevolucao the localDevolucao to set
+     */
+    public void setLocalDevolucao(String localDevolucao) {
+        this.localDevolucao = localDevolucao;
     }
     
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import views.HomeServidor;
 import views.JanelaConsulta;
@@ -16,8 +17,7 @@ import views.JanelaConsulta;
 public class ViewListener implements ActionListener {
 
     private InterfaceServ refServidor;
-    
-    //private JanelaPrincipal principal;
+
     private HomeServidor home;
     private JanelaConsulta consulta;
     ArrayList<Carro> carros;
@@ -25,16 +25,11 @@ public class ViewListener implements ActionListener {
     public ViewListener(InterfaceServ refServidor) throws RemoteException {
         this.refServidor = refServidor;
         
-//        this.principal = new JanelaPrincipal();
         this.home = new HomeServidor();
-//        this.principal.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.home.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        this.principal.setVisible(true);
         this.home.setVisible(true);
-        
-//        this.principal.getjButton1().addActionListener(this);
+
         this.home.getjButton1().addActionListener(this);
-//        this.principal.getjButton2().addActionListener(this);
         populaTabela();
         
         consulta = new JanelaConsulta();
@@ -73,27 +68,39 @@ public class ViewListener implements ActionListener {
                         consulta.gettStatus().setText("Disponível");
                     }
                 }
+            } else {
+                JOptionPane.showMessageDialog(consulta, "Selecione um carro da tabela para alterar o preço.");
             }
         } else if (e.getSource() == this.consulta.getBtnAlterarPreco()) {
-            String placa = this.consulta.gettPlaca().getText();
-            double novoPrecoDiaria = Double.parseDouble(this.consulta.gettValor().getText());
-            for (Carro c: carros) {
-                if (c.getPlaca().equals(placa)) {
-                    c.setPrecoDiaria(novoPrecoDiaria);
-                    System.out.println("Existem "+c.getClientesInteressados().size()+" clientes interessados no carro "+c.getModelo()+" da "+c.getMarca());
-                    for (InterfaceCli ic: c.getClientesInteressados()) {
-                        try {
-                            ic.receberNotificacao(c);
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(ViewListener.class.getName()).log(Level.SEVERE, null, ex);
+            if (!this.consulta.gettValor().getText().equals("") && this.consulta.gettValor().getText() != null) {
+                String placa = this.consulta.gettPlaca().getText();
+                try {
+                    double novoPrecoDiaria = Double.parseDouble(this.consulta.gettValor().getText());
+
+                    for (Carro c : carros) {
+                        if (c.getPlaca().equals(placa)) {
+                            c.setPrecoDiaria(novoPrecoDiaria);
+                            System.out.println("Existem " + c.getClientesInteressados().size() + " clientes interessados no carro " + c.getModelo() + " da " + c.getMarca());
+                            for (InterfaceCli ic : c.getClientesInteressados()) {
+                                try {
+                                    ic.receberNotificacao(c);
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(ViewListener.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                            break;
                         }
+
                     }
-                    break;
+                    JOptionPane.showMessageDialog(consulta, "Preço alterado com sucesso.");
+                    this.consulta.dispose();
+                    atualizarTabela(placa, novoPrecoDiaria);
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(consulta, "Insira um valor válido para o preço da diária!");
                 }
-                
+            } else {
+                JOptionPane.showMessageDialog(consulta, "Insira um valor para o preço da diária!");
             }
-            this.consulta.dispose();
-            atualizarTabela(placa, novoPrecoDiaria);
         }
         
     }
