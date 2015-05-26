@@ -74,6 +74,7 @@ public class ImplementServ extends UnicastRemoteObject implements InterfaceServ 
                 carros.get(i).setClienteAtual(refCliente);
                 carros.get(i).setLocalRetirada(c.getLocalRetirada());
                 carros.get(i).setLocalDevolucao(c.getLocalDevolucao());
+                carros.get(i).addClienteInteressado(refCliente);
 //                Sucesso da transação
                 return true;
             } else {
@@ -97,7 +98,13 @@ public class ImplementServ extends UnicastRemoteObject implements InterfaceServ 
         }
 
         if (found) {
-//            Adiciona a referencia do cliente numa lista de referencias de clientes
+//          Verifica se o cliente já está na lista de interessados
+            for (InterfaceCli cli : carros.get(id).getClientesInteressados()) {
+                if (cli.getIdCliente() == refCliente.getIdCliente()) {
+                    return false;
+                }
+            }
+//          Adiciona a referencia do cliente numa lista de referencias de clientes
             carros.get(i).addClienteInteressado(refCliente);
             return true;
         } else {
